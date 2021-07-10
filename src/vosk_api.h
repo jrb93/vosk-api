@@ -17,6 +17,8 @@
 #ifndef VOSK_API_H
 #define VOSK_API_H
 
+#define DLL_EXPORT __declspec(dllexport)
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -44,7 +46,7 @@ typedef struct VoskRecognizer VoskRecognizer;
  *
  * @param model_path: the path of the model on the filesystem
  @ @returns model object */
-VoskModel *vosk_model_new(const char *model_path);
+VoskModel DLL_EXPORT *vosk_model_new(const char *model_path);
 
 
 /** Releases the model memory
@@ -52,7 +54,7 @@ VoskModel *vosk_model_new(const char *model_path);
  *  The model object is reference-counted so if some recognizer
  *  depends on this model, model might still stay alive. When
  *  last recognizer is released, model will be released too. */
-void vosk_model_free(VoskModel *model);
+void DLL_EXPORT vosk_model_free(VoskModel *model);
 
 
 /** Check if a word can be recognized by the model
@@ -60,14 +62,14 @@ void vosk_model_free(VoskModel *model);
  * @returns the word symbol if @param word exists inside the model
  * or -1 otherwise.
  * Reminding that word symbol 0 is for <epsilon> */
-int vosk_model_find_word(VoskModel *model, const char *word);
+int DLL_EXPORT vosk_model_find_word(VoskModel *model, const char *word);
 
 
 /** Loads speaker model data from the file and returns the model object
  *
  * @param model_path: the path of the model on the filesystem
  * @returns model object */
-VoskSpkModel *vosk_spk_model_new(const char *model_path);
+VoskSpkModel DLL_EXPORT *vosk_spk_model_new(const char *model_path);
 
 
 /** Releases the model memory
@@ -75,14 +77,14 @@ VoskSpkModel *vosk_spk_model_new(const char *model_path);
  *  The model object is reference-counted so if some recognizer
  *  depends on this model, model might still stay alive. When
  *  last recognizer is released, model will be released too. */
-void vosk_spk_model_free(VoskSpkModel *model);
+void DLL_EXPORT vosk_spk_model_free(VoskSpkModel *model);
 
 /** Creates the recognizer object
  *
  *  The recognizers process the speech and return text using shared model data 
  *  @param sample_rate The sample rate of the audio you going to feed into the recognizer
  *  @returns recognizer object */
-VoskRecognizer *vosk_recognizer_new(VoskModel *model, float sample_rate);
+VoskRecognizer DLL_EXPORT *vosk_recognizer_new(VoskModel *model, float sample_rate);
 
 
 /** Creates the recognizer object with speaker recognition
@@ -93,7 +95,7 @@ VoskRecognizer *vosk_recognizer_new(VoskModel *model, float sample_rate);
  *  @param sample_rate The sample rate of the audio you going to feed into the recognizer
  *  @param spk_model speaker model for speaker identification
  *  @returns recognizer object */
-VoskRecognizer *vosk_recognizer_new_spk(VoskModel *model, float sample_rate, VoskSpkModel *spk_model);
+VoskRecognizer DLL_EXPORT *vosk_recognizer_new_spk(VoskModel *model, float sample_rate, VoskSpkModel *spk_model);
 
 
 /** Creates the recognizer object with the phrase list
@@ -111,7 +113,7 @@ VoskRecognizer *vosk_recognizer_new_spk(VoskModel *model, float sample_rate, Vos
  *                 for example "["one two three four five", "[unk]"]".
  *
  *  @returns recognizer object */
-VoskRecognizer *vosk_recognizer_new_grm(VoskModel *model, float sample_rate, const char *grammar);
+VoskRecognizer DLL_EXPORT *vosk_recognizer_new_grm(VoskModel *model, float sample_rate, const char *grammar);
 
 
 /** Adds speaker model to already initialized recognizer
@@ -120,7 +122,7 @@ VoskRecognizer *vosk_recognizer_new_grm(VoskModel *model, float sample_rate, con
  * speaker recognition for grammar-based recognizer.
  *
  * @param spk_model Speaker recognition model */
-void vosk_recognizer_set_spk_model(VoskRecognizer *recognizer, VoskSpkModel *spk_model);
+void DLL_EXPORT vosk_recognizer_set_spk_model(VoskRecognizer *recognizer, VoskSpkModel *spk_model);
 
 
 /** Configures recognizer to output n-best results
@@ -136,7 +138,7 @@ void vosk_recognizer_set_spk_model(VoskRecognizer *recognizer, VoskSpkModel *spk
  *
  * @param max_alternatives - maximum alternatives to return from recognition results
  */
-void vosk_recognizer_set_max_alternatives(VoskRecognizer *recognizer, int max_alternatives);
+void DLL_EXPORT vosk_recognizer_set_max_alternatives(VoskRecognizer *recognizer, int max_alternatives);
 
 
 /** Enables words with times in the output
@@ -172,7 +174,7 @@ void vosk_recognizer_set_max_alternatives(VoskRecognizer *recognizer, int max_al
  *
  * @param words - boolean value
  */
-void vosk_recognizer_set_words(VoskRecognizer *recognizer, int words);
+void DLL_EXPORT vosk_recognizer_set_words(VoskRecognizer *recognizer, int words);
 
 
 /** Accept voice data
@@ -182,17 +184,17 @@ void vosk_recognizer_set_words(VoskRecognizer *recognizer, int words);
  *  @param data - audio data in PCM 16-bit mono format
  *  @param length - length of the audio data
  *  @returns true if silence is occured and you can retrieve a new utterance with result method */
-int vosk_recognizer_accept_waveform(VoskRecognizer *recognizer, const char *data, int length);
+int DLL_EXPORT vosk_recognizer_accept_waveform(VoskRecognizer *recognizer, const char *data, int length);
 
 
 /** Same as above but the version with the short data for language bindings where you have
  *  audio as array of shorts */
-int vosk_recognizer_accept_waveform_s(VoskRecognizer *recognizer, const short *data, int length);
+int DLL_EXPORT vosk_recognizer_accept_waveform_s(VoskRecognizer *recognizer, const short *data, int length);
 
 
 /** Same as above but the version with the float data for language bindings where you have
  *  audio as array of floats */
-int vosk_recognizer_accept_waveform_f(VoskRecognizer *recognizer, const float *data, int length);
+int DLL_EXPORT vosk_recognizer_accept_waveform_f(VoskRecognizer *recognizer, const float *data, int length);
 
 
 /** Returns speech recognition result
@@ -211,7 +213,7 @@ int vosk_recognizer_accept_waveform_f(VoskRecognizer *recognizer, const float *d
  *
  * If word times enabled returns word time, see also vosk_recognizer_set_word_times().
  */
-const char *vosk_recognizer_result(VoskRecognizer *recognizer);
+const char DLL_EXPORT *vosk_recognizer_result(VoskRecognizer *recognizer);
 
 
 /** Returns partial speech recognition
@@ -225,7 +227,7 @@ const char *vosk_recognizer_result(VoskRecognizer *recognizer);
  * }
  * </pre>
  */
-const char *vosk_recognizer_partial_result(VoskRecognizer *recognizer);
+const char DLL_EXPORT *vosk_recognizer_partial_result(VoskRecognizer *recognizer);
 
 
 /** Returns speech recognition result. Same as result, but doesn't wait for silence
@@ -234,19 +236,19 @@ const char *vosk_recognizer_partial_result(VoskRecognizer *recognizer);
  *
  *  @returns speech result in JSON format.
  */
-const char *vosk_recognizer_final_result(VoskRecognizer *recognizer);
+const char DLL_EXPORT *vosk_recognizer_final_result(VoskRecognizer *recognizer);
 
 
 /** Resets the recognizer
  *
  *  Resets current results so the recognition can continue from scratch */
-void vosk_recognizer_reset(VoskRecognizer *recognizer);
+void DLL_EXPORT vosk_recognizer_reset(VoskRecognizer *recognizer);
 
 
 /** Releases recognizer object
  *
  *  Underlying model is also unreferenced and if needed released */
-void vosk_recognizer_free(VoskRecognizer *recognizer);
+void DLL_EXPORT vosk_recognizer_free(VoskRecognizer *recognizer);
 
 /** Set log level for Kaldi messages
  *
@@ -255,21 +257,21 @@ void vosk_recognizer_free(VoskRecognizer *recognizer);
  *     less than 0 - don't print info messages
  *     greather than 0 - more verbose mode
  */
-void vosk_set_log_level(int log_level);
+void DLL_EXPORT vosk_set_log_level(int log_level);
 
 /**
  *  Init, automatically select a CUDA device and allow multithreading.
  *  Must be called once from the main thread.
  *  Has no effect if HAVE_CUDA flag is not set.
  */
-void vosk_gpu_init();
+void DLL_EXPORT vosk_gpu_init();
 
 /**
  *  Init CUDA device in a multi-threaded environment.
  *  Must be called for each thread.
  *  Has no effect if HAVE_CUDA flag is not set.
  */
-void vosk_gpu_thread_init();
+void DLL_EXPORT vosk_gpu_thread_init();
 
 #ifdef __cplusplus
 }
